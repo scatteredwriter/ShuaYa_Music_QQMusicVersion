@@ -1,0 +1,79 @@
+﻿<Page
+    x:Class="ShuaYa_Music_QQMusicVersion.HitsMusicPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ShuaYa_Music_QQMusicVersion"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodel="using:ShuaYa_Music_QQMusicVersion.ViewModels"
+    mc:Ignorable="d">
+
+    <Page.Resources>
+        <!--#region 热门推荐GridView样式-->
+        <Style x:Key="HitMusic_GridView_Style" TargetType="GridView">
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"></Setter>
+            <Setter Property="IsItemClickEnabled" Value="False"></Setter>
+            <Setter Property="ItemTemplate">
+                <Setter.Value>
+                    <DataTemplate>
+                        <RelativePanel Padding="0,10,5,10" Width="400">
+                            <Path x:Name="HeadImg" RelativePanel.AlignLeftWithPanel="True" Margin="5,0,0,0">
+                                <Path.Fill>
+                                    <ImageBrush ImageSource="{Binding albumpic_small}"></ImageBrush>
+                                </Path.Fill>
+                                <Path.Data>
+                                    <EllipseGeometry Center="35,35" RadiusX="35" RadiusY="35">
+                                    </EllipseGeometry>
+                                </Path.Data>
+                            </Path>
+                            <TextBlock x:Name="songname" Text="{Binding songname}" Width="90" TextTrimming="WordEllipsis" ToolTipService.ToolTip="{Binding songname}" FontSize="17" FontWeight="Bold" RelativePanel.RightOf="HeadImg" RelativePanel.AlignVerticalCenterWith="HeadImg" Margin="20,0,0,0"></TextBlock>
+                            <TextBlock x:Name="singername" Text="{Binding singername}" Width="60" TextTrimming="WordEllipsis" ToolTipService.ToolTip="{Binding singername}" FontSize="17" FontWeight="Bold" RelativePanel.RightOf="songname" RelativePanel.AlignVerticalCenterWith="HeadImg" Margin="20,0,0,0"></TextBlock>
+                            <AppBarButton x:Name="play" Icon="Play" Height="43" Width="30" RelativePanel.RightOf="singername" RelativePanel.AlignVerticalCenterWith="HeadImg" Margin="10,0,0,0" Click="play_Click"></AppBarButton>
+                            <AppBarButton x:Name="download" Icon="Download" Height="43" Width="30" RelativePanel.RightOf="play" RelativePanel.AlignVerticalCenterWith="HeadImg" Click="download_Click"></AppBarButton>
+                        </RelativePanel>
+                    </DataTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        <!--#endregion-->
+    </Page.Resources>
+    
+    <Page.DataContext>
+        <viewmodel:HitsMusicViewModel></viewmodel:HitsMusicViewModel>
+    </Page.DataContext>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Pivot x:Name="pivot">
+            <PivotItem>
+                <PivotItem.Header>
+                    <TextBlock Text="今日热门"></TextBlock>
+                </PivotItem.Header>
+                <GridView x:Name="today_gridview" ItemsSource="{Binding Today_Hit_Music}" Style="{StaticResource HitMusic_GridView_Style}" ItemContainerStyle="{StaticResource GridViewItem_Style}"></GridView>
+            </PivotItem>
+            <PivotItem>
+                <PivotItem.Header>
+                    <TextBlock Text="内地热门"></TextBlock>
+                </PivotItem.Header>
+                <GridView x:Name="cn_gridview" ItemsSource="{Binding Cn_Hit_Music}" Style="{StaticResource HitMusic_GridView_Style}" ItemContainerStyle="{StaticResource GridViewItem_Style}"></GridView>
+            </PivotItem>
+            <PivotItem>
+                <PivotItem.Header>
+                    <TextBlock Text="港台热门"></TextBlock>
+                </PivotItem.Header>
+                <GridView x:Name="tw_gridview" ItemsSource="{Binding Tw_Hit_Music}" Style="{StaticResource HitMusic_GridView_Style}" ItemContainerStyle="{StaticResource GridViewItem_Style}"></GridView>
+            </PivotItem>
+            <PivotItem>
+                <PivotItem.Header>
+                    <TextBlock Text="韩国热门"></TextBlock>
+                </PivotItem.Header>
+                <GridView x:Name="kr_gridview" ItemsSource="{Binding Kr_Hit_Muisc}" Style="{StaticResource HitMusic_GridView_Style}" ItemContainerStyle="{StaticResource GridViewItem_Style}"></GridView>
+            </PivotItem>
+            <PivotItem>
+                <PivotItem.Header>
+                    <TextBlock Text="日本热门"></TextBlock>
+                </PivotItem.Header>
+                <GridView x:Name="jp_gridview" ItemsSource="{Binding Jp_Hit_Music}" Style="{StaticResource HitMusic_GridView_Style}" ItemContainerStyle="{StaticResource GridViewItem_Style}"></GridView>
+            </PivotItem>
+        </Pivot>
+    </Grid>
+</Page>

@@ -1,0 +1,102 @@
+﻿<Page
+    x:Class="ShuaYa_Music_QQMusicVersion.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ShuaYa_Music_QQMusicVersion"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodel="using:ShuaYa_Music_QQMusicVersion.ViewModels"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <viewmodel:MainPageViewModel></viewmodel:MainPageViewModel>
+    </Page.DataContext>
+    
+    <Grid x:Name="root_grid" Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <!--#region PC端响应式优化-->
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup>
+                <VisualState>
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="1120"></AdaptiveTrigger>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <Setter Target="Title_Grid.Grid.ColumnSpan" Value="1"></Setter>
+                        <Setter Target="SplitView_Grid.Grid.ColumnSpan" Value="1"></Setter>
+                        <Setter Target="But_Rp.Visibility" Value="Collapsed"></Setter>
+                        <Setter Target="play_song_frame.Visibility" Value="Visible"></Setter>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+        <!--#endregion-->
+
+        <Grid x:Name="Title_Grid" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+            <RelativePanel x:Name="Title_Rp">
+                <Button x:Name="menu_button" Foreground="White" Background="Transparent" Height="50" Width="50" RelativePanel.AlignLeftWithPanel="True" Click="menu_button_Click">
+                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;"></FontIcon>
+                </Button>
+                <TextBlock x:Name="page_message" Foreground="White" Text="{Binding Page_Title}" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True"></TextBlock>
+            </RelativePanel>
+        </Grid>
+        <Grid x:Name="SplitView_Grid" Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+            <SplitView x:Name="splitview" OpenPaneLength="250">
+
+                <!--#region 汉堡菜单-->
+                <SplitView.Pane>
+                    <Grid x:Name="splitview_pane_grid">
+                        <ListView x:Name="menu_listview" ItemsSource="{Binding Menu}" Style="{StaticResource Pane_ListView_Style}" IsItemClickEnabled="True" ItemClick="menu_listview_ItemClick"></ListView>
+                    </Grid>
+                </SplitView.Pane>
+                <!--#endregion-->
+
+                <Frame x:Name="main_frame"></Frame>
+
+            </SplitView>
+
+        </Grid>
+        <RelativePanel x:Name="But_Rp" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Visibility="Visible">
+            <Path x:Name="song_img" RelativePanel.AlignLeftWithPanel="True" Margin="10,10,10,10">
+                <Path.Fill>
+                    <ImageBrush ImageSource="{Binding PlayMusic.albumpic_small}"></ImageBrush>
+                </Path.Fill>
+                <Path.Data>
+                    <EllipseGeometry Center="25,25" RadiusX="25" RadiusY="25"></EllipseGeometry>
+                </Path.Data>
+            </Path>
+            <AppBarButton x:Name="LastSong" Foreground="White" Icon="Previous" Height="50" RelativePanel.LeftOf="PlaySong" RelativePanel.AlignVerticalCenterWithPanel="True" Click="LastSong_Click"></AppBarButton>
+            <AppBarButton x:Name="PlaySong" Foreground="White" Icon="Play" Height="50" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Click="PlaySong_Click"></AppBarButton>
+            <AppBarButton x:Name="NextSong" Foreground="White" Icon="Next" Height="50" RelativePanel.RightOf="PlaySong" RelativePanel.AlignVerticalCenterWithPanel="True" Click="NextSong_Click"></AppBarButton>
+            <AppBarButton x:Name="playlist_but" Foreground="White" Icon="List" Height="50" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Click="playlist_but_Click">
+                <AppBarButton.Flyout>
+                    <Flyout ScrollViewer.IsVerticalRailEnabled="True" FlyoutPresenterStyle="{StaticResource Flyout_Style}">
+                        <ListView x:Name="playlist_listview" ItemsSource="{Binding PlayList}" Style="{StaticResource Main_ListView_Style}" ItemContainerStyle="{StaticResource ListViewItem_Style}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <RelativePanel Height="50" Padding="5,5,0,5">
+                                        <TextBlock x:Name="songname" Text="{Binding songname}" TextTrimming="WordEllipsis" ToolTipService.ToolTip="{Binding songname}" Width="100" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True"></TextBlock>
+                                        <TextBlock x:Name="singername" Text="{Binding singername}" TextTrimming="WordEllipsis" ToolTipService.ToolTip="{Binding singername}" Width="100" RelativePanel.RightOf="songname" RelativePanel.AlignVerticalCenterWithPanel="True"></TextBlock>
+                                        <AppBarButton x:Name="list_play" Icon="Play" RelativePanel.LeftOf="list_delete" RelativePanel.AlignVerticalCenterWithPanel="True" Click="list_play_Click"></AppBarButton>
+                                        <AppBarButton x:Name="list_delete" Icon="Delete" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Click="list_delete_Click"></AppBarButton>
+                                    </RelativePanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+        </RelativePanel>
+        <MediaElement x:Name="mediaelement" Grid.Row="2" AreTransportControlsEnabled="False" AutoPlay="True"></MediaElement>
+        <Frame x:Name="play_song_frame" Grid.Row="0" Grid.RowSpan="3" Grid.Column="1" Visibility="Collapsed"></Frame>
+    </Grid>
+</Page>

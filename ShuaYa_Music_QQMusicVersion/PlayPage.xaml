@@ -1,0 +1,67 @@
+﻿<Page
+    x:Class="ShuaYa_Music_QQMusicVersion.PlayPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ShuaYa_Music_QQMusicVersion"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:viewmodel="using:ShuaYa_Music_QQMusicVersion.ViewModels"
+    mc:Ignorable="d">
+
+    <Page.DataContext>
+        <viewmodel:PlayMusicViewModel></viewmodel:PlayMusicViewModel>
+    </Page.DataContext>
+
+    <Page.Resources>
+        <local:Songname_Converter x:Key="songname_converter"></local:Songname_Converter>
+        <local:Singername_Converter x:Key="singername_converter"></local:Singername_Converter>
+    </Page.Resources>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <RelativePanel x:Name="Title_Rp" Grid.Row="0">
+            <TextBlock x:Name="title" Text="正在播放" Foreground="White" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True"></TextBlock>
+        </RelativePanel>
+        <RelativePanel Grid.Row="1">
+            <Path x:Name="albumpic" Grid.Row="1" StrokeThickness="2" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True">
+                <Path.Fill>
+                    <ImageBrush ImageSource="{Binding PlayMusic.albumpic_big}"></ImageBrush>
+                </Path.Fill>
+                <Path.Data>
+                    <EllipseGeometry Center="125,125" RadiusX="125" RadiusY="125"></EllipseGeometry>
+                </Path.Data>
+            </Path>
+            <RelativePanel x:Name="SongMessage_Rp" RelativePanel.Below="albumpic" RelativePanel.AlignHorizontalCenterWithPanel="True">
+                <TextBlock x:Name="songname_tb" Text="{Binding PlayMusic.songname,Converter={StaticResource songname_converter}}" FontWeight="Bold" TextTrimming="WordEllipsis" Margin="0,20,0,0"></TextBlock>
+                <TextBlock x:Name="singername_tb" Text="{Binding PlayMusic.singername,Converter={StaticResource singername_converter}}" FontWeight="Bold" TextTrimming="WordEllipsis" RelativePanel.Below="songname_tb" RelativePanel.AlignHorizontalCenterWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Margin="0,20,0,0"></TextBlock>
+            </RelativePanel>
+        </RelativePanel>
+        <RelativePanel x:Name="But_Rp" Grid.Row="2" Padding="0,10,0,10">
+            <AppBarButton x:Name="LastSong" Foreground="White" Icon="Previous" Height="50" RelativePanel.LeftOf="PlaySong" Click="LastSong_Click"></AppBarButton>
+            <AppBarButton x:Name="PlaySong" Foreground="White" Icon="Play" Height="50" RelativePanel.AlignHorizontalCenterWithPanel="True" Click="PlaySong_Click"></AppBarButton>
+            <AppBarButton x:Name="NextSong" Foreground="White" Icon="Next" Height="50" RelativePanel.RightOf="PlaySong" Click="NextSong_Click"></AppBarButton>
+            <AppBarButton x:Name="PlayList" Foreground="White" Icon="List" Height="50" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Click="playlist_but_Click">
+                <AppBarButton.Flyout>
+                    <Flyout ScrollViewer.IsVerticalRailEnabled="True" FlyoutPresenterStyle="{StaticResource Flyout_Style}">
+                        <ListView x:Name="playlist_listview" ItemsSource="{Binding PlayList}" Style="{StaticResource Main_ListView_Style}" ItemContainerStyle="{StaticResource ListViewItem_Style}">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <RelativePanel Height="50" Padding="5,5,0,5">
+                                        <TextBlock x:Name="songname" Text="{Binding songname}" TextTrimming="WordEllipsis" ToolTipService.ToolTip="{Binding songname}" Width="100" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True"></TextBlock>
+                                        <TextBlock x:Name="singername" Text="{Binding singername}" TextTrimming="WordEllipsis" ToolTipService.ToolTip="{Binding singername}" Width="100" RelativePanel.RightOf="songname" RelativePanel.AlignVerticalCenterWithPanel="True"></TextBlock>
+                                        <AppBarButton x:Name="list_play" Icon="Play" RelativePanel.LeftOf="list_delete" RelativePanel.AlignVerticalCenterWithPanel="True" Click="list_play_Click"></AppBarButton>
+                                        <AppBarButton x:Name="list_delete" Icon="Delete" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignVerticalCenterWithPanel="True" Click="list_delete_Click"></AppBarButton>
+                                    </RelativePanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+        </RelativePanel>
+    </Grid>
+</Page>
